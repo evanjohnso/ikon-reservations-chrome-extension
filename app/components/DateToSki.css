@@ -1,0 +1,21 @@
+.dateToSki {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  width: 60px;
+  border: 1px solid grey;
+  border-radius: 4px;
+  margin-right: 10px;
+  margin-top: 5px;
+}
+
+.dateToSki span {
+  visibility: hidden;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.dateToSki:hover span {
+  visibility: visible;
+}
