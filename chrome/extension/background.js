@@ -1,4 +1,4 @@
-const bluebird = require('bluebird');
+const bluebird = require("bluebird");
 
 global.Promise = bluebird;
 
@@ -14,20 +14,24 @@ function promisifier(method) {
 }
 
 function promisifyAll(obj, list) {
-  list.forEach(api => bluebird.promisifyAll(obj[api], { promisifier }));
+  list.forEach((api) => bluebird.promisifyAll(obj[api], { promisifier }));
 }
 
 // let chrome extension api support Promise
-promisifyAll(chrome, [
-  'tabs',
-  'windows',
-  'browserAction',
-  'contextMenus'
-]);
-promisifyAll(chrome.storage, [
-  'local',
-]);
+promisifyAll(chrome, ["tabs", "windows", "browserAction", "contextMenus"]);
+promisifyAll(chrome.storage, ["local"]);
 
-require('./background/contextMenus');
-require('./background/inject');
-require('./background/badge');
+require("./background/contextMenus");
+require("./background/inject");
+require("./background/badge");
+
+chrome.runtime.onMessage.addListener((data) => {
+  if (data.type === "notification") {
+    chrome.notifications.onClicked.addListener(notificationCallBack);
+    chrome.notifications.create("", data.options);
+  }
+});
+
+function notificationCallBack() {
+  chrome.runtime.sendMessage("", { type: "notificationClicked" });
+}
