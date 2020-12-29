@@ -12,7 +12,7 @@ import {
 const _localStorageSkiDaysKey = "daysIWantToSki";
 const _localStorageResortKey = "ski_resort";
 
-export class IkonApp extends Component {
+export class ResortPicker extends Component {
   intervalKey = undefined;
 
   constructor(props) {
