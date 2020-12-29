@@ -51,6 +51,7 @@ export class IkonApp extends Component {
 
   pollOnInterval = (days) => {
     if (days && days.length) {
+      this.pollIt(days); // call right away on a date change
       return setInterval(() => this.pollIt(days), 10 * 1000);
     }
     return undefined;

@@ -1,5 +1,5 @@
 const _commonNotificationOptions = {
-  iconUrl: "../../chrome/assets/img/icon-16.png",
+  iconUrl: "img/robot.png",
   type: "basic",
   isClickable: true,
 };

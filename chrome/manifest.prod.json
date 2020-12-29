@@ -5,7 +5,8 @@
   "description": "Skip the line for reservations",
   "browser_action": {
     "default_title": "Ikon Reservations",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "img/robot.png"
   },
   "icons": {
     "16": "img/icon-16.png",
