@@ -15,7 +15,8 @@
   },
   "web_accessible_resources": ["inject.html"],
   "background": {
-    "page": "background.html"
+    "page": "background.html",
+    "persistent": true
   },
   "permissions": [
     "contextMenus",
