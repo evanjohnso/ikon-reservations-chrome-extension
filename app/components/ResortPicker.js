@@ -22,7 +22,6 @@ export class ResortPicker extends Component {
 
   handleDateChange = (e) => {
     var copy = [...this.state.daysToSki];
-    console.log(e.target.value);
     var day = e.target.value;
     if (copy.indexOf(day) === -1) {
       copy.push(day);
