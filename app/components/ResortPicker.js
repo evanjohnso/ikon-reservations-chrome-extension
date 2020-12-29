@@ -22,7 +22,7 @@ export class ResortPicker extends Component {
 
   handleDateChange = (e) => {
     var copy = [...this.state.daysToSki];
-    console.log(e.target);
+    console.log(e.target.value);
     var day = e.target.value;
     if (copy.indexOf(day) === -1) {
       copy.push(day);
@@ -39,7 +39,6 @@ export class ResortPicker extends Component {
   };
 
   updateDaysToSki = (days) => {
-    clearInterval(this.intervalKey); // clear polling function
     this.setState({ daysToSki: days });
     localStorage.setItem(_localStorageSkiDaysKey, JSON.stringify(days));
     this.pollOnInterval(days); // start polling again
@@ -52,9 +51,13 @@ export class ResortPicker extends Component {
   };
 
   handleResortChange = (e) => {
+    this.pollOnInterval([]); // stop the first polling timer
+
     var resort = e.target.value;
     this.setState({ skiResort: resort });
     localStorage.setItem(_localStorageResortKey, resort);
+
+    this.pollOnInterval(days); // start polling again
   };
 
   render() {

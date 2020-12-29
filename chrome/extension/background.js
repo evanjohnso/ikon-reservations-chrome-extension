@@ -92,9 +92,11 @@ function parseResponse(rawData, daysIWantToSki) {
   console.log(`Checking for ${daysIWantToSki.join(", ")}`);
   var unavailableDates = rawData["data"][0]["unavailable_dates"];
   daysIWantToSki.forEach((date) => {
-    var inList = unavailableDates.some((d) => d === date);
-    if (!inList) {
-      reservationNotification(date);
+    if (date) {
+      var inList = unavailableDates.some((d) => d === date);
+      if (!inList) {
+        reservationNotification(date);
+      }
     }
   });
 }
