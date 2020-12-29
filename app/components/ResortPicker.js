@@ -53,19 +53,16 @@ export class ResortPicker extends Component {
     this.pollOnInterval([]); // stop the first polling timer
 
     var resort = e.target.value;
-    this.setState({ skiResort: resort });
     localStorage.setItem(_localStorageResortKey, resort);
 
-    this.pollOnInterval(days); // start polling again
+    // start a new polling
+    this.setState({ skiResort: resort });
+    this.pollOnInterval(this.state.daysToSki);
   };
 
   render() {
     return (
       <div>
-        <SelectedDays
-          onRemove={this.handleRemoveDay}
-          selectedDays={this.state.daysToSki}
-        />
         <Step text="Step 1: Select your hill">
           <Dropdown
             values={Object.keys(SKI_RESORTS)}
@@ -77,6 +74,10 @@ export class ResortPicker extends Component {
         <Step text="Step 2: Select your days">
           <Calendar onChange={this.handleDateChange} />
         </Step>
+        <SelectedDays
+          onRemove={this.handleRemoveDay}
+          selectedDays={this.state.daysToSki}
+        />
       </div>
     );
   }
