@@ -6,7 +6,7 @@ export function Calendar(props) {
       type="date"
       onChange={props.onChange}
       min={todayAsString()}
-      max={"2021-05-05"}
+      max={"2021-05-01"}
     />
   );
 }

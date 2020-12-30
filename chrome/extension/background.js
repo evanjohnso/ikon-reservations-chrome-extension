@@ -82,6 +82,7 @@ chrome.runtime.onMessage.addListener((data) => {
     var resortId = data["resortId"];
     var intervalId = INTERVAL_BUCKET[resortId];
     if (intervalId) {
+      clearAllSystemNotifications(); // get rid of all the stale notifications
       clearInterval(intervalId);
       delete INTERVAL_BUCKET[resortId];
     }
@@ -146,6 +147,16 @@ function reservationNotification(day, resortId) {
 
 function errorNotification(message) {
   __launchNotification(`Something isn't quite right`, message);
+}
+
+function clearAllSystemNotifications() {
+  chrome.notifications.getAll((items) => {
+    if (items) {
+      for (let key in items) {
+        chrome.notifications.clear(key);
+      }
+    }
+  });
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
