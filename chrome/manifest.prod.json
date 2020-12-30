@@ -6,12 +6,12 @@
   "browser_action": {
     "default_title": "Ikon Reservations",
     "default_popup": "popup.html",
-    "default_icon": "img/robot.png"
+    "default_icon": "img/snowflake.png"
   },
   "icons": {
-    "16": "img/icon-16.png",
-    "48": "img/icon-48.png",
-    "128": "img/icon-128.png"
+    "16": "img/snowflake.png",
+    "48": "img/snowflake.png",
+    "128": "img/snowflake.png"
   },
   "web_accessible_resources": ["inject.html"],
   "background": {

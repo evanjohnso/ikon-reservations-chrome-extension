@@ -131,7 +131,7 @@ function __launchNotification(title, message) {
   chrome.notifications.create("", {
     title,
     message,
-    iconUrl: "img/robot.png",
+    iconUrl: "img/snowflake.png",
     type: "basic",
     isClickable: true,
   });
@@ -139,9 +139,7 @@ function __launchNotification(title, message) {
 
 function reservationNotification(day, resortId) {
   __launchNotification(
-    `${resortLookup(resortId).label} reservation available on ${transformDate(
-      day
-    )}!`,
+    `${resortLookup(resortId).label} available on ${transformDate(day)}!!`,
     "Quick, go make the reservation!"
   );
 }
