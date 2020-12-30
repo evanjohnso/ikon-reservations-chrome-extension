@@ -27,13 +27,11 @@ $ npm run dev
 ```bash
 # start fresh
 $ rm -rf build
-# build files to './build'
+# builds files to './build'
 $ npm run build
 ```
 
 - Select the `build` folder under "Load unpacked" in chrome://extensions
-
-- Then, load in the `build` folder to
 
 ## LICENSE
 
