@@ -8,6 +8,11 @@ export const SKI_RESORTS = {
 
 export const defaultResort = Object.keys(SKI_RESORTS)[0];
 
+/**
+ **********************************************************************************
+ *  NOTE if you add a resort, you must add the same lookup in background.js as well!!
+ **********************************************************************************
+ */
 export function resortLookup(resort) {
   switch (resort) {
     case "bigsky":

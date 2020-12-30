@@ -4,7 +4,10 @@ import { Dropdown } from "./Dropdown";
 import { SelectedDays } from "./SelectedDays";
 import { Step } from "./Step";
 import { SKI_RESORTS, resortLookup, defaultResort } from "../constants/resorts";
-import { launchAvailabilityRequestPolling } from "../utils/notifications";
+import {
+  launchAvailabilityRequestPolling,
+  launchCancelPollingNotification,
+} from "../utils/notifications";
 
 const _localStorageSkiDaysKey = "daysIWantToSki";
 const _localStorageResortKey = "ski_resort";
@@ -20,7 +23,20 @@ export class ResortPicker extends Component {
     this.pollOnInterval(this.state.daysToSki);
   }
 
-  handleDateChange = (e) => {
+  handleResortChange = (e) => {
+    this.cancelCurrentPoll();
+
+    var resort = e.target.value;
+    localStorage.setItem(_localStorageResortKey, resort);
+
+    // start a new polling
+    this.setState({ skiResort: resort }, () => {
+      // ensure it was after the state was set
+      this.pollOnInterval(this.state.daysToSki);
+    });
+  };
+
+  handleDateSelect = (e) => {
     var copy = [...this.state.daysToSki];
     var day = e.target.value;
     if (copy.indexOf(day) === -1) {
@@ -38,26 +54,23 @@ export class ResortPicker extends Component {
   };
 
   updateDaysToSki = (days) => {
-    this.setState({ daysToSki: days });
+    this.cancelCurrentPoll();
+
     localStorage.setItem(_localStorageSkiDaysKey, JSON.stringify(days));
-    this.pollOnInterval(days); // start polling again
+    this.setState({ daysToSki: days }, () => {
+      if (days && days.length) {
+        // ensure its after the state was set
+        this.pollOnInterval(days);
+      }
+    });
   };
 
   pollOnInterval = (days) => {
-    var resortId = SKI_RESORTS[this.state.skiResort].code;
-    // the background task manages the interval
-    launchAvailabilityRequestPolling(resortId, days);
+    launchAvailabilityRequestPolling(this.state.skiResort, days);
   };
 
-  handleResortChange = (e) => {
-    this.pollOnInterval([]); // stop the first polling timer
-
-    var resort = e.target.value;
-    localStorage.setItem(_localStorageResortKey, resort);
-
-    // start a new polling
-    this.setState({ skiResort: resort });
-    this.pollOnInterval(this.state.daysToSki);
+  cancelCurrentPoll = () => {
+    launchCancelPollingNotification(this.state.skiResort);
   };
 
   render() {
@@ -72,7 +85,7 @@ export class ResortPicker extends Component {
           />
         </Step>
         <Step text="Step 2: Select your days">
-          <Calendar onChange={this.handleDateChange} />
+          <Calendar onChange={this.handleDateSelect} />
         </Step>
         <SelectedDays
           onRemove={this.handleRemoveDay}

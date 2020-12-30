@@ -29,6 +29,26 @@ require("./background/badge");
 // Ikon Pass Notification Center //
 ///////////////////////////////////
 
+/**
+ **********************************************************************************
+ *  NOTE if you add a resort, you must add the same lookup in resorts.js as well!!
+ **********************************************************************************
+ */
+function resortLookup(resort) {
+  switch (resort) {
+    case "bigsky":
+      return { label: "Big Sky", code: 4 };
+    case "brighton":
+      return { label: "Brighton", code: 8 };
+    case "crystal":
+      return { label: "Crystal", code: 10 };
+    case "snoqualmie":
+      return { label: "Snoqualmie", code: 29 };
+    case "winterpark":
+      return { label: "Winter Park", code: 34 };
+  }
+}
+
 // FORMAT => resortId: intervalId
 const INTERVAL_BUCKET = {};
 
@@ -44,14 +64,11 @@ chrome.runtime.onMessage.addListener((data) => {
     var resortId = data["resortId"];
     var selectedDays = data["selectedDays"];
 
-    // stop the last one
-    clearInterval(INTERVAL_BUCKET[resortId]);
-
-    if (selectedDays && selectedDays.length) {
+    if (resortId && selectedDays && selectedDays.length) {
       // request right away
       requestAvailability(resortId, selectedDays);
 
-      // request on interval
+      // also, request on interval
       var intervalId = setInterval(
         () => requestAvailability(resortId, selectedDays),
         10 * 1000
@@ -59,6 +76,14 @@ chrome.runtime.onMessage.addListener((data) => {
 
       // save the new Id
       INTERVAL_BUCKET[resortId] = intervalId;
+    }
+  } else if (data.type === "cancelPolling") {
+    // cancel the polling function
+    var resortId = data["resortId"];
+    var intervalId = INTERVAL_BUCKET[resortId];
+    if (intervalId) {
+      clearInterval(intervalId);
+      delete INTERVAL_BUCKET[resortId];
     }
   }
 });
@@ -68,9 +93,9 @@ function notificationCallBack() {
 }
 
 function requestAvailability(resortId, selectedDays) {
-  // use correct url
   var url =
-    "https://account.ikonpass.com/api/v2/reservation-availability/" + resortId;
+    "https://account.ikonpass.com/api/v2/reservation-availability/" +
+    resortLookup(resortId).code;
 
   // attach cookie for validation
   var headers = new Headers();
@@ -85,17 +110,18 @@ function requestAvailability(resortId, selectedDays) {
         );
       }
     })
-    .then((data) => parseResponse(data, selectedDays));
+    .then((data) => parseResponse(data, selectedDays, resortId));
 }
 
-function parseResponse(rawData, daysIWantToSki) {
-  console.log(`Checking for ${daysIWantToSki.join(", ")}`);
+function parseResponse(rawData, daysIWantToSki, resortId) {
+  console.log(`Checking ${resortId} for ${daysIWantToSki.join(", ")}`);
+
   var unavailableDates = rawData["data"][0]["unavailable_dates"];
   daysIWantToSki.forEach((date) => {
     if (date) {
       var inList = unavailableDates.some((d) => d === date);
       if (!inList) {
-        reservationNotification(date);
+        reservationNotification(date, resortId);
       }
     }
   });
@@ -111,9 +137,11 @@ function __launchNotification(title, message) {
   });
 }
 
-function reservationNotification(day) {
+function reservationNotification(day, resortId) {
   __launchNotification(
-    `Reservation available for ${transformDate(day)}!`,
+    `${resortLookup(resortId).label} reservation available on ${transformDate(
+      day
+    )}!`,
     "Quick, go make the reservation!"
   );
 }
@@ -122,7 +150,9 @@ function errorNotification(message) {
   __launchNotification(`Something isn't quite right`, message);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
 
 function transformDate(rawDate) {
   var yearMonthDay = rawDate.split("-");
