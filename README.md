@@ -1,5 +1,10 @@
 # Ikon Pass Chrome Extension
 
+* You'll need an Ikon pass
+* Login to https://acccount.ikonpass.com
+* Follow the `build` instructions
+* Know how to [load unpacked extensions](https://developer.chrome.com/extensions/getstarted#unpacked)
+
 ## Installation
 
 ```bash
