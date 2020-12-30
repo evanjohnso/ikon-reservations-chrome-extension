@@ -4,6 +4,7 @@ export const SKI_RESORTS = {
   crystal: resortLookup("crystal"),
   snoqualmie: resortLookup("snoqualmie"),
   winterpark: resortLookup("winterpark"),
+  taos: resortLookup("taos"),
 };
 
 export const defaultResort = Object.keys(SKI_RESORTS)[0];
@@ -25,5 +26,7 @@ export function resortLookup(resort) {
       return { label: "Snoqualmie", code: 29 };
     case "winterpark":
       return { label: "Winter Park", code: 34 };
+    case "taos":
+      return { label: "Taos", code: 31 };
   }
 }
