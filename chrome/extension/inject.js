@@ -44,7 +44,8 @@ window.addEventListener("load", () => {
   injectDOM.className = "inject-react-example";
   injectDOM.style.textAlign = "center";
   document.body.appendChild(injectDOM);
-  render(<InjectApp />, injectDOM);
+  // renders the Open TodoApp on GitHub.com only
+  // render(<InjectApp />, injectDOM);
 });
 
 chrome.runtime.onMessage.addListener((data) => {

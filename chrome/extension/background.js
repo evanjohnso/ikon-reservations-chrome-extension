@@ -76,20 +76,24 @@ chrome.runtime.onMessage.addListener((data) => {
         10 * 1000
       );
 
-      // save the new Id
-      INTERVAL_BUCKET[resortId] = intervalId;
+      resetInterval(resortId);
+      INTERVAL_BUCKET[resortId] = intervalId; // save the new Id
     }
   } else if (data.type === "cancelPolling") {
     // cancel the polling function
     var resortId = data["resortId"];
-    var intervalId = INTERVAL_BUCKET[resortId];
+    resetInterval(resortId);
+  }
+});
+
+function resetInterval(resortId) {
+  var intervalId = INTERVAL_BUCKET[resortId];
     if (intervalId) {
       clearAllSystemNotifications(); // get rid of all the stale notifications
       clearInterval(intervalId);
       delete INTERVAL_BUCKET[resortId];
     }
-  }
-});
+}
 
 function notificationCallBack() {
   chrome.runtime.sendMessage("", { type: "notificationClicked" });
