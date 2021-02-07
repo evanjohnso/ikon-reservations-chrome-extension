@@ -9,7 +9,7 @@
 
 ```bash
 # clone it
-$ git clone https://github.com/jhen0409/react-chrome-extension-boilerplate.git
+$ git clone https://github.com/evanjohnso/ikon-reservations-chrome-extension.git
 
 # Install dependencies
 $ npm install
