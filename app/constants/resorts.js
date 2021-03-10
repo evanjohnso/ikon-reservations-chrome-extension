@@ -28,5 +28,7 @@ export function resortLookup(resort) {
       return { label: "Winter Park", code: 34 };
     case "taos":
       return { label: "Taos", code: 31 };
+    case "winterpark":
+      return { label: "Winter Park", code: 34 };
   }
 }
